@@ -1,0 +1,5 @@
+.idea/
+dist
+hexlet_code/__pycache__/
+out/
+tests/__pycache__/
