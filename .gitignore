@@ -3,3 +3,5 @@ dist
 hexlet_code/__pycache__/
 out/
 tests/__pycache__/
+.coverage
+coverage.xml
