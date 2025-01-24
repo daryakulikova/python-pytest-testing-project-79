@@ -11,7 +11,7 @@ packages = [
 [project]
 name = "hexlet-code"
 version = "0.1.0"
-dependencies = ["bs4"]
+dependencies = ["bs4", "pytest_asyncio"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
