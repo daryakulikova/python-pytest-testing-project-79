@@ -4,12 +4,17 @@ import os
 import re
 from urllib.parse import urlsplit, urlunsplit
 from bs4 import BeautifulSoup
+from hexlet_code.app_logger import get_logger
 
+logger = get_logger(__name__)
 
 def download(url, path):
     parsed_page_url = urlsplit(url)
     name_from_url = make_name(parsed_page_url)
+    logger.info(f"requested url: {url}")
+    logger.info(f"output path: {os.path.abspath(path)}")
     html_file_path = get_html(url, path, name_from_url)
+    logger.info(f"write html file: {html_file_path}")
     dir_abs_path = make_dir(name_from_url, path)
     with open(html_file_path, "r") as fr:
         soup = BeautifulSoup(fr, "html.parser")
@@ -34,6 +39,7 @@ def make_name(parsed_url):
     path_without_exe = re.search(pattern, path)[1]
     raw_name = parsed_url.netloc + path_without_exe
     new_name = re.sub(r"\W", "-", raw_name)
+    logger.debug(f"Get name '{new_name}' from path: '{path}'")
     return new_name
 
 
