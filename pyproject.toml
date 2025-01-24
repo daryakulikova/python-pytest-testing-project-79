@@ -5,6 +5,10 @@ description = ""
 authors = ["dkulikova <d.d.kulikova@gmail.com>"]
 readme = "README.md"
 
+[project]
+name = "hexlet-code"
+version = "0.1.0"
+
 [tool.poetry.dependencies]
 python = "^3.10"
 requests = "^2.28.0"
