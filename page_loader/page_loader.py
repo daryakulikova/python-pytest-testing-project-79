@@ -44,6 +44,9 @@ def download(url, path):
             f"Can't create '{html_file_path}' – no permission to directory"
         )
         raise KnownException() from e
+    except:
+        logger.error(f'Received an  unexpected error when creating a file')
+        raise KnownException()
     return html_file_path
 
 
@@ -76,6 +79,9 @@ def get_html(url, path, name):
             f"Can't create '{new_file_path}' – no permission to directory"
         )
         raise KnownException() from e
+    except:
+        logger.error(f'Received an  unexpected error when creating a file')
+        raise KnownException()
     return os.path.abspath(new_file_path)
 
 
@@ -91,6 +97,9 @@ def make_dir(name, path):
             f" or no permission to create it"
         )
         raise KnownException() from e
+    except:
+        logger.error(f'Received an  unexpected error when creating the directory')
+        raise KnownException()
     return os.path.abspath(new_dir_path)
 
 
@@ -141,3 +150,6 @@ def get_cont(cont_url, path):
         logger.debug(f'Received an error {e} when creating a file')
         logger.error(f"Can't create '{path}' – no permission to directory")
         raise KnownException() from e
+    except:
+        logger.error(f'Received an  unexpected error when creating a file')
+        raise KnownException()
