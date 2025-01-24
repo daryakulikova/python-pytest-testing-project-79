@@ -8,6 +8,11 @@ from hexlet_code.app_logger import get_logger
 
 logger = get_logger(__name__)
 
+
+class KnownException(Exception):
+    pass
+
+
 def download(url, path):
     parsed_page_url = urlsplit(url)
     name_from_url = make_name(parsed_page_url)
@@ -16,20 +21,29 @@ def download(url, path):
     html_file_path = get_html(url, path, name_from_url)
     logger.info(f"write html file: {html_file_path}")
     dir_abs_path = make_dir(name_from_url, path)
-    with open(html_file_path, "r") as fr:
-        soup = BeautifulSoup(fr, "html.parser")
-        if soup.find_all("img", src=True):
-            dwl_cont_mod_html(soup, parsed_page_url, dir_abs_path, "img", "src")
-        if soup.find_all("link", href=True):
-            dwl_cont_mod_html(
-                soup, parsed_page_url, dir_abs_path, "link", "href"
-            )
-        if soup.find_all("script", src=True):
-            dwl_cont_mod_html(
-                soup, parsed_page_url, dir_abs_path, "script", "src"
-            )
-        with open(html_file_path, "w") as fw:
-            print(soup.prettify(), file=fw)
+    try:
+        with open(html_file_path, "r") as fr:
+            soup = BeautifulSoup(fr, "html.parser")
+            if soup.find_all("img", src=True):
+                dwl_cont_mod_html(
+                    soup, parsed_page_url, dir_abs_path, "img", "src"
+                )
+            if soup.find_all("link", href=True):
+                dwl_cont_mod_html(
+                    soup, parsed_page_url, dir_abs_path, "link", "href"
+                )
+            if soup.find_all("script", src=True):
+                dwl_cont_mod_html(
+                    soup, parsed_page_url, dir_abs_path, "script", "src"
+                )
+            with open(html_file_path, "w") as fw:
+                print(soup.prettify(), file=fw)
+    except PermissionError as e:
+        logger.debug(f'Received an error {e} when creating a file')
+        logger.error(
+            f"Can't create '{html_file_path}' – no permission to directory"
+        )
+        raise KnownException() from e
     return html_file_path
 
 
@@ -46,17 +60,37 @@ def make_name(parsed_url):
 def get_html(url, path, name):
     file_name = name + ".html"
     new_file_path = os.path.join(path, file_name)
-    with requests.get(url) as response:
-        html = response.text
+    try:
+        with requests.get(url, timeout=10) as response:
+            response.raise_for_status()
+            html = response.text
         with open(new_file_path, "w") as f:
             print(html, file=f, end="")
+    except requests.exceptions.HTTPError as e:
+        logger.debug(f'Request to url get error {e}')
+        logger.error(f"Bad status code – {e}")
+        raise KnownException() from e
+    except PermissionError as e:
+        logger.debug(f'Received an error {e} when creating a file')
+        logger.error(
+            f"Can't create '{new_file_path}' – no permission to directory"
+        )
+        raise KnownException() from e
     return os.path.abspath(new_file_path)
 
 
 def make_dir(name, path):
     dir_name = name + "_files"
     new_dir_path = os.path.join(path, dir_name)
-    os.mkdir(new_dir_path)
+    try:
+        os.mkdir(new_dir_path)
+    except OSError as e:
+        logger.debug(f'Received an error {e} when creating the directory')
+        logger.error(
+            f"Directory '{dir_name}' already exist"
+            f" or no permission to create it"
+        )
+        raise KnownException() from e
     return os.path.abspath(new_dir_path)
 
 
@@ -92,8 +126,18 @@ def dwl_cont_mod_html(soup, parsed_page_url, dir_abs_path, _tag, _attr):
 
 
 def get_cont(cont_url, path):
-    with requests.get(cont_url, stream=True) as response:
-        chunked_content = response.iter_content(8192)
-        with open(path, "bw") as f:
-            for chunk in chunked_content:
-                f.write(chunk)
+    try:
+        with requests.get(cont_url, stream=True, timeout=10) as response:
+            response.raise_for_status()
+            chunked_content = response.iter_content(8192)
+            with open(path, "bw") as f:
+                for chunk in chunked_content:
+                    f.write(chunk)
+    except requests.exceptions.HTTPError as e:
+        logger.debug(f'Request to url received an error {e}')
+        logger.error(f"Bad status code – {e}")
+        raise KnownException() from e
+    except PermissionError as e:
+        logger.debug(f'Received an error {e} when creating a file')
+        logger.error(f"Can't create '{path}' – no permission to directory")
+        raise KnownException() from e
