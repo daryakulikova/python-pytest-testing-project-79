@@ -14,11 +14,11 @@ package-install: # установка пакета из ОС (запускать
 
 
 lint: # запуск линтера (flake8)
-	poetry run flake8 hexlet_code ;\
+	poetry run flake8 page_loader ;\
 	poetry run flake8 tests
 
 test-cov:
-	poetry run pytest --cov=hexlet_code -vv --cov-report xml
+	poetry run pytest --cov=page_loader -vv --cov-report xml
 
 test: # запуск pytest
 	poetry run pytest -vv
