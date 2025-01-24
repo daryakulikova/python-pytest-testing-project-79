@@ -2,7 +2,7 @@ import pytest
 import tempfile
 import os
 import requests_mock
-from hexlet_code.page_loader import download, KnownException
+from page_loader.page_loader import download, KnownException
 
 
 @pytest.mark.asyncio

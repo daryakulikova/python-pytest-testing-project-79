@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 import sys
 
-from hexlet_code.cmd_parser import parse_args
-from hexlet_code.page_loader import download, KnownException
+from page_loader.cmd_parser import parse_args
+from page_loader.page_loader import download, KnownException
 
 
 def main():

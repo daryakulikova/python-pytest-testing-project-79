@@ -4,7 +4,7 @@ import os
 import re
 from urllib.parse import urlsplit, urlunsplit
 from bs4 import BeautifulSoup
-from hexlet_code.app_logger import get_logger
+from page_loader.app_logger import get_logger
 
 logger = get_logger(__name__)
 

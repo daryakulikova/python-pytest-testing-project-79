@@ -1,6 +1,6 @@
 .idea/
 dist
-hexlet_code/__pycache__/
+page_loader/__pycache__/
 out/
 tests/__pycache__/
 .coverage
