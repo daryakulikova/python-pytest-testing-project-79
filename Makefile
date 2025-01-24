@@ -10,7 +10,7 @@ build: # собрать пакет
 
 
 package-install: # установка пакета из ОС (запускать из корня проекта)
-	uv tool install dist/*.whl
+	uv tool install --reinstall dist/*.whl
 
 
 lint: # запуск линтера (flake8)
@@ -21,6 +21,6 @@ test-cov:
 	poetry run pytest --cov=hexlet_code -vv --cov-report xml
 
 test: # запуск pytest
-	poetry run pytest
+	poetry run pytest -vv
 
 .PHONY: install build publish package-install lint test test-cov

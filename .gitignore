@@ -5,3 +5,5 @@ out/
 tests/__pycache__/
 .coverage
 coverage.xml
+demo.cast
+outdir
