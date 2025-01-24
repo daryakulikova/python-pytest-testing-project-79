@@ -6,7 +6,7 @@ authors = ["dkulikova <d.d.kulikova@gmail.com>"]
 readme = "README.md"
 
 [project]
-name = "page_loader"
+name = "hexlet-code"
 version = "0.1.0"
 
 [tool.poetry.dependencies]
