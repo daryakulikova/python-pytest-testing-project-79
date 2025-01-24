@@ -10,7 +10,7 @@ build: # собрать пакет
 
 
 package-install: # установка пакета из ОС (запускать из корня проекта)
-	uv tool install --reinstall dist/*.whl
+	uv tool install --reinstall --force dist/*.whl
 
 
 lint: # запуск линтера (flake8)

@@ -1,12 +1,12 @@
 [tool.poetry]
-name = "hexlet-code"
+name = "page-loader"
 version = "0.1.0"
 description = ""
 authors = ["dkulikova <d.d.kulikova@gmail.com>"]
 readme = "README.md"
 
 [project]
-name = "hexlet-code"
+name = "page_loader"
 version = "0.1.0"
 
 [tool.poetry.dependencies]
@@ -24,6 +24,7 @@ pytest-cov = "^3.0.0"
 requests-mock = "^1.9.3"
 asyncio = "^3.4.3"
 pytest-asyncio = "^0.18.3"
+bs4 = "^0.0.1"
 
 [build-system]
 requires = ["hatchling"]
