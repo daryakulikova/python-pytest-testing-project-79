@@ -3,7 +3,7 @@ import tempfile
 import requests_mock
 import os
 
-from page_loader.page_loader import download
+from page_loader import download
 
 FIXTURE_NAME = "hexlet_result.html"
 
