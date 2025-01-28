@@ -1,0 +1,3 @@
+class KnownException(Exception):
+    pass
+

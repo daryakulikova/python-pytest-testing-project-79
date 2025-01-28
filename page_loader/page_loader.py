@@ -5,12 +5,9 @@ import re
 from urllib.parse import urlsplit, urlunsplit
 from bs4 import BeautifulSoup
 from page_loader.app_logger import get_logger
+from page_loader.known_exception import KnownException
 
 logger = get_logger(__name__)
-
-
-class KnownException(Exception):
-    pass
 
 
 def download(url, path):
