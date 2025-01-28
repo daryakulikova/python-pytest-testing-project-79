@@ -1,4 +1,3 @@
-import pook
 import pytest
 import tempfile
 import requests_mock
