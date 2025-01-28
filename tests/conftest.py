@@ -2,79 +2,68 @@ import os
 import pytest
 import asyncio
 import pytest_asyncio
+import requests_mock
 
 FIXTURES_FOLDER = 'fixtures'
 
 
 @pytest.fixture(scope='module')
-def event_loop():
-    loop = asyncio.get_event_loop_policy().new_event_loop()
-    yield loop
-    loop.close()
-
-
-@pytest.fixture(scope='session')
-def hexlet_html_path():
-    return os.path.join(os.path.dirname(__file__),
-                        FIXTURES_FOLDER, 'hexlet.html')
-
-
-@pytest.fixture(scope='session')
-def hexlet_html_read():
+def hexlet_html():
     path = os.path.join(os.path.dirname(__file__),
                         FIXTURES_FOLDER, 'hexlet.html')
     with open(path, "r") as f:
         return f.read()
 
 
-@pytest.fixture(scope='session')
-def python_png_path():
-    return os.path.join(os.path.dirname(__file__),
-                        FIXTURES_FOLDER, 'python.png')
-
-
-@pytest.fixture(scope='session')
-def python_png_read():
-    path = os.path.join(os.path.dirname(__file__),
-                        FIXTURES_FOLDER, 'python.png')
-    with open(path, "rb") as f:
-        return f.read()
-
-
-@pytest.fixture(scope='session')
-def application_css_path():
-    return os.path.join(os.path.dirname(__file__),
-                        FIXTURES_FOLDER, 'application.css')
-
-
-@pytest.fixture(scope='session')
-def application_css_read():
+@pytest.fixture(scope='module')
+def application_css():
     path = os.path.join(os.path.dirname(__file__),
                         FIXTURES_FOLDER, 'application.css')
     with open(path, "rb") as f:
         return f.read()
 
 
-@pytest.fixture(scope='session')
-def runtime_js_path():
-    return os.path.join(os.path.dirname(__file__),
-                        FIXTURES_FOLDER, 'runtime.js')
+@pytest.fixture(scope='module')
+def python_png():
+    path = os.path.join(os.path.dirname(__file__),
+                        FIXTURES_FOLDER, 'python.png')
+    with open(path, "rb") as f:
+        return f.read()
 
 
-@pytest.fixture(scope='session')
-def runtime_js_read():
+@pytest.fixture(scope='module')
+def runtime_js():
     path = os.path.join(os.path.dirname(__file__),
                         FIXTURES_FOLDER, 'runtime.js')
     with open(path, "rb") as f:
         return f.read()
 
 
-@pytest_asyncio.fixture(scope='function')
-async def result_html(request):
-    assert getattr(request.module, 'FIXTURE_NAME', None)
+@pytest.fixture(scope='module')
+def hexlet_result_html():
+    path = os.path.join(os.path.dirname(__file__),
+                        FIXTURES_FOLDER, 'hexlet_result.html')
+    with open(path, "r") as f:
+        return f.read()
 
-    result_path = os.path.join(
-        os.path.dirname(__file__), FIXTURES_FOLDER, request.module.FIXTURE_NAME)
 
-    with open(result_path) as file:
-        return file.read()
+@pytest.fixture(scope='module')
+def mock_html(hexlet_html, application_css, python_png, runtime_js):
+    with requests_mock.Mocker() as m:
+        m.get(
+            "https://ru.hexlet.io/courses",
+            text=hexlet_html,
+        )
+        m.get(
+            "/assets/application.css",
+            content=application_css,
+        )
+        m.get(
+            "/assets/professions/python.png",
+            content=python_png,
+        )
+        m.get(
+            "https://ru.hexlet.io/packs/js/runtime.js",
+            content=runtime_js,
+        )
+        yield m
