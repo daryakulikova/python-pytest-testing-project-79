@@ -5,7 +5,6 @@ import re
 from urllib.parse import urlsplit, urlunsplit
 from bs4 import BeautifulSoup
 from page_loader.app_logger import get_logger
-from page_loader.known_exception import KnownException
 
 logger = get_logger(__name__)
 
@@ -40,10 +39,10 @@ def download(url, path):
         logger.error(
             f"Can't create '{html_file_path}' – no permission to directory"
         )
-        raise KnownException() from e
+        raise Exception() from e
     except:
         logger.error(f'Received an  unexpected error when creating a file')
-        raise KnownException()
+        raise Exception()
     return html_file_path
 
 
@@ -69,16 +68,16 @@ def get_html(url, path, name):
     except requests.exceptions.HTTPError as e:
         logger.debug(f'Request to url get error {e}')
         logger.error(f"Bad status code – {e}")
-        raise KnownException() from e
+        raise Exception() from e
     except PermissionError as e:
         logger.debug(f'Received an error {e} when creating a file')
         logger.error(
             f"Can't create '{new_file_path}' – no permission to directory"
         )
-        raise KnownException() from e
+        raise Exception() from e
     except:
         logger.error(f'Received an  unexpected error when creating a file')
-        raise KnownException()
+        raise Exception()
     return os.path.abspath(new_file_path)
 
 
@@ -93,10 +92,10 @@ def make_dir(name, path):
             f"Directory '{dir_name}' already exist"
             f" or no permission to create it"
         )
-        raise KnownException() from e
+        raise Exception() from e
     except:
         logger.error(f'Received an  unexpected error when creating the directory')
-        raise KnownException()
+        raise Exception()
     return os.path.abspath(new_dir_path)
 
 
@@ -142,11 +141,11 @@ def get_cont(cont_url, path):
     except requests.exceptions.HTTPError as e:
         logger.debug(f'Request to url received an error {e}')
         logger.error(f"Bad status code – {e}")
-        raise KnownException() from e
+        raise Exception() from e
     except PermissionError as e:
         logger.debug(f'Received an error {e} when creating a file')
         logger.error(f"Can't create '{path}' – no permission to directory")
-        raise KnownException() from e
+        raise Exception() from e
     except:
         logger.error(f'Received an  unexpected error when creating a file')
-        raise KnownException()
+        raise Exception()
